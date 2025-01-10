@@ -19,7 +19,7 @@ mp_drawing_styles = mp.solutions.drawing_styles
 hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
 
 # Dictionnaire des labels
-labels_dict = {0: 'A', 1: 'B', 2: 'L', 3: 'W'}  # Adapte ce dictionnaire selon tes labels
+labels_dict = {0: 'A', 1: 'B', 2: 'L', 3: 'W', 4: 'hello'}  # Adapte ce dictionnaire selon tes labels
 
 while True:
     data_aux = []
@@ -74,23 +74,26 @@ while True:
 
         # Faire la prédiction
         prediction = model.predict([np.asarray(data_aux)])
-
-        # Vérification du format de la prédiction (si c'est un label comme 'Lettre-W')
         predicted_value = prediction[0]
 
-        if isinstance(predicted_value, str) and '-' in predicted_value:
-            # Si la prédiction est sous forme 'Lettre-X', on extrait la lettre
-            predicted_character = predicted_value.split('-')[1]
+        # Gérer différents formats de prédiction
+        if isinstance(predicted_value, str):  # Si la prédiction est une chaîne
+            if '-' in predicted_value:
+                # Si la chaîne est sous forme 'Lettre-X', on extrait 'X'
+                predicted_character = predicted_value.split('-')[1]
+            else:
+                # Sinon, on utilise directement la chaîne
+                predicted_character = predicted_value
         else:
-            # Si c'est un entier, on l'utilise comme index pour le dictionnaire
-            predicted_character = labels_dict.get(int(predicted_value), 'Inconnu')
+            # Si la prédiction est un entier, chercher dans le dictionnaire
+            predicted_character = labels_dict.get(int(predicted_value), 'Signe Inconnu')
 
         # Afficher un rectangle autour de la main et la lettre prédite
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
         cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
 
     # Afficher la vidéo avec la prédiction
-    cv2.imshow('frame', frame)
+    cv2.imshow('ASL Sign Detection', frame)
 
     # Quitter lorsque la touche 'q' est pressée
     if cv2.waitKey(1) & 0xFF == ord('q'):

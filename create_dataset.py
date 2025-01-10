@@ -61,7 +61,7 @@ for dir_ in os.listdir(DATA_DIR):
                     expected_length = 42  # 21 points x 2 (x, y)
                     if len(data_aux) == expected_length:
                         data.append(data_aux)
-                        labels.append(dir_)
+                        labels.append(dir_.replace('Label-', ''))
                     else:
                         print(f"Données ignorées pour l'image {img_full_path} en raison d'une longueur incohérente.")
 

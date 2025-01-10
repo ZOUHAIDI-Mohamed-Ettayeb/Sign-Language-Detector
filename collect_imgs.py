@@ -7,24 +7,24 @@ DATA_DIR = './data'
 if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
 
-# Liste des lettres (modifiez si nécessaire)
-lettres = list(string.ascii_uppercase)  # ['A', 'B', 'C', ..., 'Z']
+# Liste des labels (lettres et mots supplémentaires)
+labels = list(string.ascii_uppercase) + ['hello', 'thanks', 'yes', 'no', 'i_love_you']
 
-# Taille du dataset pour chaque lettre
+# Taille du dataset pour chaque label
 dataset_size = 100
 
 # Initialiser la caméra
 cap = cv2.VideoCapture(0)
 
-# Collecte des images pour chaque lettre
-for index, lettre in enumerate(lettres):
-    dossier_lettre = f'Lettre-{lettre}'  # Nom du dossier pour la lettre
-    chemin_dossier = os.path.join(DATA_DIR, dossier_lettre)
+# Collecte des images pour chaque label
+for index, label in enumerate(labels):
+    dossier_label = f'Label-{label}'  # Nom du dossier pour le label
+    chemin_dossier = os.path.join(DATA_DIR, dossier_label)
     
     if not os.path.exists(chemin_dossier):
         os.makedirs(chemin_dossier)
 
-    print(f'Collecte des données pour la classe {lettre} (index {index})')
+    print(f'Collecte des données pour la classe {label} (index {index})')
 
     # Préparation avant la collecte
     while True:
